@@ -62,6 +62,12 @@ fn read_user_from_file<P: AsRef<Path>>(path: P) -> Result<Vec<User>, Box<Error>>
     Ok(u)
 }
 
+#[get("/")]
+fn all_data() -> Json<Vec<User>> {
+    let users = read_user_from_file("data.json").unwrap();
+    Json(users)
+}
+
 #[get("/?<zip>&<country>")]
 fn data(zip: String, country: String) -> Json<Vec<User>> {
     let mut users = read_user_from_file("data.json").unwrap();
@@ -74,7 +80,7 @@ fn data(zip: String, country: String) -> Json<Vec<User>> {
 
 fn main() {
     rocket::ignite()
-        .mount("/data", routes![data])
+        .mount("/data", routes![all_data, data])
         .mount("/generate", routes![generate])
         .launch();
 }
