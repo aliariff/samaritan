@@ -7,9 +7,11 @@ extern crate serde_derive;
 #[macro_use]
 extern crate fake;
 extern crate chrono;
+extern crate rand;
 extern crate rocket_contrib;
 
 use chrono::prelude::*;
+use rand::seq::SliceRandom;
 use rocket_contrib::json::Json;
 use std::error::Error;
 use std::fs::File;
@@ -22,6 +24,8 @@ use user::User;
 fn generate() -> &'static str {
     let mut number = 100;
     let mut vec = Vec::new();
+    let zipcodes = ["00100", "00101", "00120", "00130", "00140"];
+    let mut rng = rand::thread_rng();
 
     while number != 0 {
         let user = User {
@@ -32,7 +36,7 @@ fn generate() -> &'static str {
             electricity_usage: fake!(Number.between(500, 1000)), // in kwh
             water_usage: fake!(Number.between(5000, 10000)), // in gallons
             gas_usage: fake!(Number.between(50, 500)), // in m^3
-            zip: fake!(Address.zip),
+            zip: zipcodes.choose(&mut rng).unwrap().to_string(),
             country: "Finland".to_string(),
         };
         vec.push(user);
