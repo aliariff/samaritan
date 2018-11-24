@@ -1,0 +1,6 @@
+[package]
+name = "samaritan"
+version = "0.1.0"
+authors = ["Ali Ariff <ali.ariff12@gmail.com>"]
+
+[dependencies]
