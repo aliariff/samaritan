@@ -4,8 +4,12 @@
 extern crate rocket;
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate fake;
+extern crate chrono;
 extern crate rocket_contrib;
 
+use chrono::prelude::*;
 use rocket_contrib::json::Json;
 use std::error::Error;
 use std::fs::File;
@@ -22,14 +26,14 @@ fn generate() -> &'static str {
     while number != 0 {
         let user = User {
             id: number,
-            name: "String".to_string(),
-            month: "String".to_string(),
-            size: 70,
-            electricity_usage: 200,
-            water_usage: 400,
-            gas_usage: 50,
-            zip: "52078".to_string(),
-            country: "Germany".to_string(),
+            name: fake!(Name.name),
+            month: Utc::now().format("%m.%Y").to_string(),
+            size: fake!(Number.between(12, 100)), // in m^2
+            electricity_usage: fake!(Number.between(500, 1000)), // in kwh
+            water_usage: fake!(Number.between(5000, 10000)), // in gallons
+            gas_usage: fake!(Number.between(50, 500)), // in m^3
+            zip: fake!(Address.zip),
+            country: "Finland".to_string(),
         };
         vec.push(user);
         number = number - 1;
